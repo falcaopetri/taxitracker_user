@@ -1,0 +1,2 @@
+include ':app', ':taxitracker_library'
+project(':taxitracker_library').projectDir = new File(settingsDir, '../TaxiTracker-Library/taxitracker_library')
