@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/TaxiTracker-User.iml" filepath="$PROJECT_DIR$/TaxiTracker-User.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/../TaxiTracker-Library/taxitracker_library/taxitracker_library.iml" filepath="$PROJECT_DIR$/../TaxiTracker-Library/taxitracker_library/taxitracker_library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/taxitracker_user.iml" filepath="$PROJECT_DIR$/taxitracker_user.iml" />
     </modules>
   </component>
 </project>
