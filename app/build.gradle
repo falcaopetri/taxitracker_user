@@ -30,5 +30,6 @@ dependencies {
     compile 'com.google.code.gson:gson:1.7.2'
 
 
+    compile 'com.google.android.gms:play-services-appindexing:9.4.0'
 }
 apply plugin: 'com.google.gms.google-services'
