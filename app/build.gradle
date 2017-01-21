@@ -21,15 +21,15 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:appcompat-v7:25.1.0'
     testCompile 'junit:junit:4.12'
     compile project(path: ':taxitracker_library')
     compile 'com.firebaseui:firebase-ui:0.4.4'
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    compile 'com.google.code.gson:gson:1.7.2'
-
+    compile 'com.google.code.gson:gson:2.4'
 
     compile 'com.google.android.gms:play-services-appindexing:9.4.0'
 }
+
 apply plugin: 'com.google.gms.google-services'

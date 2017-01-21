@@ -45,10 +45,7 @@ public class MainActivity extends AppCompatActivity implements TaxiTrackerRestHa
         setContentView(R.layout.activity_main);
 
         taxiTrackerRest = new TaxiTrackerRestClientUsage(this);
-
-
         auth = FirebaseAuth.getInstance();
-
 
         if (auth.getCurrentUser() != null) {
             //user already signed in
@@ -60,25 +57,6 @@ public class MainActivity extends AppCompatActivity implements TaxiTrackerRestHa
                             AuthUI.GOOGLE_PROVIDER)
                     .build(), RC_SIGN_IN);
         }
-
-        //FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-        mUser = auth.getCurrentUser();
-        mUser.getToken(true)
-                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                    public void onComplete(@NonNull Task<GetTokenResult> task) {
-                        if (task.isSuccessful()) {
-                            idToken = task.getResult().getToken();
-                            Log.d("ID TOKEN", idToken);
-                            // Send token to your backend via HTTPS
-                            taxiTrackerRest.login(idToken, AUTH_USER_TAG);
-                            // ...
-                        } else {
-                            // Handle error -> task.getException();
-                        }
-                    }
-                });
-
-
 
         findViewById(R.id.log_out_button).setOnClickListener(this);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -93,15 +71,28 @@ public class MainActivity extends AppCompatActivity implements TaxiTrackerRestHa
             if (resultCode == RESULT_OK) {
                 //user logged in
                 Log.d("AUTH", auth.getCurrentUser().getUid());
-                //getEmail());
+                mUser = auth.getCurrentUser();
+                mUser.getToken(true)
+                        .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                            public void onComplete(@NonNull Task<GetTokenResult> task) {
+                                if (task.isSuccessful()) {
+                                    idToken = task.getResult().getToken();
+                                    Log.d("ID TOKEN", idToken);
+                                    // Send token to your backend via HTTPS
+                                    taxiTrackerRest.login(idToken, AUTH_USER_TAG);
+                                    // ...
+                                } else {
+                                    // Handle error -> task.getException();
+                                }
+                            }
+                        });
+
             } else {
                 //user not authnticated
                 Log.d("AUTH", "NOT AUTHENTICATED");
             }
         }
     }
-
-
 
 
     @Override
