@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements TaxiTrackerRestHa
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+
     }
 
     @Override
@@ -81,17 +83,22 @@ public class MainActivity extends AppCompatActivity implements TaxiTrackerRestHa
                                     // Send token to your backend via HTTPS
                                     taxiTrackerRest.login(idToken, AUTH_USER_TAG);
                                     // ...
+                                    Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                                    startActivity(intent);
+                                    MainActivity.this.finish();
                                 } else {
                                     // Handle error -> task.getException();
                                 }
                             }
                         });
 
+
             } else {
                 //user not authnticated
                 Log.d("AUTH", "NOT AUTHENTICATED");
             }
         }
+
     }
 
 
