@@ -10,13 +10,22 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="br.ufscar.dc.mds.taxitracker_user.MainActivity">
 
-
-    <Button
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleInverse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log Out"
-        android:id="@+id/log_out_button"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@android:color/transparent"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_alignTop="@id/progressBar"
+        android:text="Conectando-se ao servidor"/>
 </RelativeLayout>

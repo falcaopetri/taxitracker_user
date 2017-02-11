@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -25,7 +26,7 @@ import java.io.UnsupportedEncodingException;
 import br.ufscar.dc.mds.taxitracker_library.TaxiTrackerRestClientUsage;
 import br.ufscar.dc.mds.taxitracker_library.TaxiTrackerRestHandler;
 
-public class MainActivity extends AppCompatActivity implements TaxiTrackerRestHandler, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements TaxiTrackerRestHandler {
     TaxiTrackerRestClientUsage taxiTrackerRest;
     private final static String AUTH_USER_TAG = "passageiro";
     private static final int RC_SIGN_IN = 0;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements TaxiTrackerRestHa
     private GoogleApiClient client;
     private FirebaseUser mUser;
     private String idToken;
+    private ProgressBar mProgress;
 
 
     @Override
@@ -44,12 +46,32 @@ public class MainActivity extends AppCompatActivity implements TaxiTrackerRestHa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mProgress = (ProgressBar) findViewById(R.id.progressBar);
+
         taxiTrackerRest = new TaxiTrackerRestClientUsage(this);
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() != null) {
             //user already signed in
             Log.d("AUTH", auth.getCurrentUser().getEmail());
+            mProgress.setVisibility(View.VISIBLE);
+            auth.getCurrentUser().getToken(false).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                public void onComplete(@NonNull Task<GetTokenResult> task) {
+                    mProgress.setVisibility(View.INVISIBLE);
+                    if (task.isSuccessful()) {
+                        idToken = task.getResult().getToken();
+                        Log.d("ID TOKEN", idToken);
+                        // Send token to your backend via HTTPS
+                        taxiTrackerRest.login(idToken, AUTH_USER_TAG);
+                        // ...
+                        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                        startActivity(intent);
+                        MainActivity.this.finish();
+                    } else {
+                        // Handle error -> task.getException();
+                    }
+                }
+            });
         } else {
             startActivityForResult(AuthUI.getInstance()
                     .createSignInIntentBuilder()
@@ -58,18 +80,16 @@ public class MainActivity extends AppCompatActivity implements TaxiTrackerRestHa
                     .build(), RC_SIGN_IN);
         }
 
-        findViewById(R.id.log_out_button).setOnClickListener(this);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
+            mProgress.setVisibility(View.VISIBLE);
             if (resultCode == RESULT_OK) {
                 //user logged in
                 Log.d("AUTH", auth.getCurrentUser().getUid());
@@ -77,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements TaxiTrackerRestHa
                 mUser.getToken(true)
                         .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                             public void onComplete(@NonNull Task<GetTokenResult> task) {
+                                mProgress.setVisibility(View.INVISIBLE);
                                 if (task.isSuccessful()) {
                                     idToken = task.getResult().getToken();
                                     Log.d("ID TOKEN", idToken);
@@ -112,33 +133,13 @@ public class MainActivity extends AppCompatActivity implements TaxiTrackerRestHa
         Toast.makeText(this, "logged with token " + access_token, Toast.LENGTH_LONG).show();
         taxiTrackerRest.add_auth_token(access_token);
 
-        taxiTrackerRest.getPassageiros();
+        //taxiTrackerRest.getPassageiros();
 
-        try {
+        /*try {
             taxiTrackerRest.createRace(this, "origem", "destino");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.log_out_button) {
-            AuthUI.getInstance()
-                    .signOut(this)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Log.d("AUTH", "USER LOGGED OUT");
-                            //finish();
-                            startActivityForResult(AuthUI.getInstance()
-                                    .createSignInIntentBuilder()
-                                    .setProviders(
-                                            AuthUI.GOOGLE_PROVIDER)
-                                    .build(), RC_SIGN_IN);
-                        }
-                    });
-        }
+        }*/
     }
 
     /**

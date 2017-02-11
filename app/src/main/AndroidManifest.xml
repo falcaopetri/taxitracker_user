@@ -11,6 +11,8 @@
         https://developers.google.com/places/documentation/android/start
         -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
 
     <!-- PlacePicker also requires OpenGL ES version 2 -->
     <uses-feature
