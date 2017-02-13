@@ -104,4 +104,9 @@ public class MainActivity extends AppCompatActivity implements TaxiTrackerRestHa
     public void on_refresh_info(JSONObject response) {
 
     }
+
+    @Override
+    public void on_race_created(JSONObject response) {
+
+    }
 }
