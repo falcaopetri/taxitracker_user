@@ -46,6 +46,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 
 import br.ufscar.dc.mds.taxitracker_library.TaxiTrackerRestClientUsage;
@@ -128,42 +130,15 @@ public class MapsActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(AppIndex.API)
                 .addApi(Places.PLACE_DETECTION_API)
                 .addApi(Places.GEO_DATA_API)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         mGoogleApiClient.connect();
-        AppIndex.AppIndexApi.start(mGoogleApiClient, getIndexApiAction());
-    }
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("Main Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
     }
 
     @Override
@@ -192,40 +167,17 @@ public class MapsActivity extends AppCompatActivity
 
     }
 
-    /**
-     * Extracts data from PlacePicker result.
-     * This method is called when an Intent has been started by calling
-     * {@link #startActivityForResult(android.content.Intent, int)}. The Intent for the
-     * {@link com.google.android.gms.location.places.ui.PlacePicker} is started with
-     * {@link #REQUEST_PLACE_PICKER} request code. When a result with this request code is received
-     * in this method, its data is extracted by converting the Intent data to a {@link Place}
-     * through the
-     * {@link com.google.android.gms.location.places.ui.PlacePicker#getPlace(android.content.Intent,
-     * android.content.Context)} call.
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // BEGIN_INCLUDE(activity_result)
         if (requestCode == REQUEST_PLACE_PICKER) {
-            // This result is from the PlacePicker dialog.
-
-            // Enable the picker option
-            //showPickAction(true);
-
-            if (resultCode == Activity.RESULT_OK) {
+           if (resultCode == Activity.RESULT_OK) {
                 /* User has picked a place, extract data.
                    Data is extracted from the returned intent by retrieving a Place object from
                    the PlacePicker.
                  */
                 final Place place = PlacePicker.getPlace(data, MapsActivity.this);
 
-                /* A Place object contains details about that place, such as its name, address
-                and phone number. Extract the name, address, phone number, place ID and place types.
-                 */
                 final CharSequence name = place.getName();
                 final CharSequence address = place.getAddress();
                 final CharSequence phone = place.getPhoneNumber();
@@ -235,8 +187,7 @@ public class MapsActivity extends AppCompatActivity
                     attribution = "";
                 }
 
-                // Print data to debug log
-                Log.d(TAG, "Place selected: " + placeId + " (" + name.toString() + ")");
+               Log.d(TAG, "Place selected: " + placeId + " (" + name.toString() + ")");
                 if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions
@@ -249,10 +200,7 @@ public class MapsActivity extends AppCompatActivity
                 }
 
                 mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-             /*   if (mGoogleApiClient == null) Log.e(TAG, "mGoogleApiClient is null");
-                PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
-                        .getCurrentPlace(mGoogleApiClient, null);
-*/
+
                 try {
 
                     Log.i(TAG, mLastLocation.toString());
@@ -262,33 +210,6 @@ public class MapsActivity extends AppCompatActivity
                 } catch (UnsupportedEncodingException | NullPointerException e) {
                     e.printStackTrace();
                 }
-/*
-                result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
-                    @Override
-                    public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
-                        try {
-                            Log.d(TAG, "creating race");
-                            if (likelyPlaces.getCount() <= 0) {
-                                Log.e(TAG, "likelyPlaces é " + likelyPlaces.getCount());
-                            } else {
-                                taxiTrackerRest.createRace(MapsActivity.this, likelyPlaces.get(0).getPlace().getLatLng().toString(), place.getLatLng().toString());
-                                Log.i(TAG, likelyPlaces.get(0).getPlace().getLatLng().toString());
-                            }
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-
-                        Log.i(TAG, place.getLatLng().toString());
-
-                        for (PlaceLikelihood placeLikelihood : likelyPlaces) {
-                            Log.i(TAG, String.format("Place '%s' has likelihood: %g",
-                                    placeLikelihood.getPlace().getName(),
-                                    placeLikelihood.getLikelihood()));
-                        }
-                        likelyPlaces.release();
-                    }
-                });
-*/
                 // Show the info
                 Toast.makeText(this, getString(R.string.detail_text, placeId, address, phone,
                         attribution),
@@ -304,7 +225,6 @@ public class MapsActivity extends AppCompatActivity
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
-        // END_INCLUDE(activity_result)
     }
 
     @Override
@@ -384,6 +304,11 @@ public class MapsActivity extends AppCompatActivity
     @Override
     public void on_login(String access_token) {
         throw new RuntimeException("should already be logged in");
+    }
+
+    @Override
+    public void on_refresh_info(JSONObject response) {
+
     }
 
     @Override
