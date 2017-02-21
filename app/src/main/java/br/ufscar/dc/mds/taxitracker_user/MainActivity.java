@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements TaxiTrackerRestHa
 
     @Override
     public void on_start_login() {
-        Toast.makeText(this, "starting loging", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "starting loging", Toast.LENGTH_LONG).show();
     }
 
     @Override

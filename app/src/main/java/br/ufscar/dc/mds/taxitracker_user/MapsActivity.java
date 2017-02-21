@@ -190,7 +190,7 @@ public class MapsActivity extends AppCompatActivity
                 });
             }
         };
-        timer.schedule(doAsynchronousTask, 0, 10000); //execute in every 50000 ms
+        timer.schedule(doAsynchronousTask, 0, 1000); //execute in every 50000 ms
     }
 
     protected void refreshInfo() {
@@ -293,7 +293,7 @@ public class MapsActivity extends AppCompatActivity
                         .show();*/
             } else {
                 // User has not selected a place, hide the card.
-                Toast.makeText(this, "did not select a place",
+                Toast.makeText(this, "Nenhum lugar selecionado.",
                         Toast.LENGTH_LONG)
                         .show();
             }
